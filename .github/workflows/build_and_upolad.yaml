@@ -15,6 +15,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Brew
+        run: brew option libomp
       - uses: actions/setup-python@v2
         name: Install Python
         with:
@@ -41,77 +43,4 @@ jobs:
           python -m pip install --upgrade pip wheel setuptools build cmake 
       - name: Build 
         run: python setup.py build
-  build_wheels:
-    name: Build wheels ${{ matrix.CIBW_BUILD }} 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false 
-      matrix:       
-        include:  
-   
-         - CIBW_BUILD: cp39-macosx_arm64
-           os: macos-latest
-           arch: arm64
-           CIBW_PLATFORM: macos 
-       
-         - CIBW_BUILD: cp39-macosx_universal2
-           os: macos-latest
-           arch: universal2
-           CIBW_PLATFORM: macos 
-         
-           
-    steps:
-      - uses: actions/checkout@v2         
-      - name: Set up QEMU
-        if: ${{ matrix.CIBW_PLATFORM == 'linux' && matrix.arch == 'aarch64' }}
-        uses: docker/setup-qemu-action@v1
-        with:
-          platforms: all
-      - name: Set up Docker Buildx
-        if: ${{ matrix.CIBW_PLATFORM  == 'linux' }}
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-        with:
-            install: true
-      - name: Build wheels on ${{ matrix.CIBW_PLATFORM }} ${{matrix.arch}}
-        uses: pypa/cibuildwheel@v2.0.0b2
-        env:
-          CIBW_PLATFORM:  ${{ matrix.CIBW_PLATFORM }}
-          CIBW_BUILD: ${{matrix.CIBW_BUILD}}
-          CIBW_ARCHS: ${{matrix.arch}}
-          CIBW_BUILD_FRONTEND: "build"
-          CIBW_DEPENDENCY_VERSIONS: latest 
-          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.7"
-          #CIBW_BUILD_VERBOSITY: 1
-          
-          CIBW_BEFORE_ALL: "" 
-          CIBW_BEFORE_ALL_LINUX: ""
-          CIBW_BEFORE_ALL_MACOS: "brew install libomp"
-          CIBW_BEFORE_ALL_WINDOWS: ""
-          
-          CIBW_BEFORE_BUILD: "pip install cmake"      
-          CIBW_BEFORE_BUILD_WINDOWS: "pip install delvewheel cmake"
-          
-          CIBW_REPAIR_WHEEL_COMMAND_MACOS: "delocate-listdeps --all --depending {wheel} && delocate-wheel  --require-archs {delocate_archs} -w {dest_dir} -v {wheel}"
-          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel show {wheel} && delvewheel repair -w {dest_dir} {wheel}"
-          
-          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux2014_x86_64:latest
-          CIBW_MANYLINUX_AARCH64_IMAGE: quay.io/pypa/manylinux2014_aarch64:latest
-          
-          CIBW_ENVIRONMENT:
-              CFLAGS="-flto -O3 -pipe"
-              CXXFLAGS="-flto -O3 -pipe"
-          CIBW_ENVIRONMENT_MACOS:
-              USE_OMP=True
-              CPPFLAGS="$CPPFLAGS -Xpreprocessor -fopenmp"
-              CFLAGS="-flto -O3 -pipe -I/usr/local/opt/libomp/include -lcblas -lclapack -framework Accelerate -framework OpenCL"
-              CXXFLAGS="-flto -O3 -pipe -I/usr/local/opt/libomp/include -lcblas -lclapack -framework Accelerate -framework OpenCL"
-              LDFLAGS="$LDFLAGS -Wl,-rpath,/usr/local/opt/libomp/lib -L/usr/local/opt/libomp/lib -lomp"
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: WHEEL
-          path: ./wheelhouse/*.whl
-          retention-days: 30
-          
   
