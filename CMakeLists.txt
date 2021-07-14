@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.18)
 
 project(cpp_pyqubo)
 
@@ -48,6 +48,9 @@ list(APPEND CMAKE_MODULE_PATH external)
 include(${CMAKE_SOURCE_DIR}/external/pybind11.cmake)
 #include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
 include_directories(cpp_dimod)
+
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
+find_package(pybind11 CONFIG REQUIRED)
 
 pybind11_add_module(cpp_pyqubo src/pybind_mapping.cpp)
 
