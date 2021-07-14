@@ -49,7 +49,6 @@ include(${CMAKE_SOURCE_DIR}/external/pybind11.cmake)
 #include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
 include_directories(cpp_dimod)
 
-add_subdirectory(pybind11)
 pybind11_add_module(cpp_pyqubo src/pybind_mapping.cpp)
 
 # VERSION_INFO is defined by setup.py and passed into the C++ code as a define (VERSION_INFO) here.
