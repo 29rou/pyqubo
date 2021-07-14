@@ -120,10 +120,9 @@ class GoogleTestCommand(TestCommand):
     """
     A custom test runner to execute both Python unittest tests and C++ Google Tests.
     """
-   def initialize_options(self):
-        self.cpplibdir = self.distutils_dir_name()
-
    user_options = []
+   def initialize_options(self):
+    self.cpplibdir = self.distutils_dir_name()
 
    def distutils_dir_name(self):
         """Returns the name of a distutils build directory"""
