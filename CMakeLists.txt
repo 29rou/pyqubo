@@ -42,14 +42,19 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH external)
 
+include(FetchContent)
+
+
 if(USE_TEST)
        include(${PROJECT_SOURCE_DIR}/external/googletest.cmake)     
+       FetchContent_MakeAvailable(googletest)
        add_subdirectory(tests)
 else()
 	message(STATUS "Skip downloding googletest")
 endif()
 
 include(${PROJECT_SOURCE_DIR}/external/pybind11.cmake)
+FetchContent_MakeAvailable(pybind11)
 #include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
 include_directories(cpp_dimod)
 
