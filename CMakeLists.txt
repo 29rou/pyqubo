@@ -52,7 +52,16 @@ include_directories(cpp_dimod)
 find_package(Python COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
 
-pybind11_add_module(cpp_pyqubo src/pybind_mapping.cpp)
+
+pybind11_add_module(cpp_pyqubo MODULE
+    ${PROJECT_SOURCE_DIR}/pybind_mapping.cpp
+    ${PROJECT_SOURCE_DIR}/express.cpp
+    ${PROJECT_SOURCE_DIR}/coeff.cpp
+    ${PROJECT_SOURCE_DIR}/encoder.cpp
+    ${PROJECT_SOURCE_DIR}/placeholderpoly.cpp
+    ${PROJECT_SOURCE_DIR}/expanded.cpp
+    ${PROJECT_SOURCE_DIR}/poly.cpp
+)
 
 # VERSION_INFO is defined by setup.py and passed into the C++ code as a define (VERSION_INFO) here.
 target_compile_definitions(cpp_pyqubo PRIVATE VERSION_INFO=${PYQUBO_VERSION_INFO})
