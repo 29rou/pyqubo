@@ -6,6 +6,7 @@ set(CMAKE_INTERPROCEDURAL_OPTIMIZATION True)
 
 set(CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -58,8 +59,9 @@ FetchContent_MakeAvailable(pybind11)
 #include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
 include_directories(cpp_dimod)
 
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 CONFIG REQUIRED)
+
+add_subdirectory(src)
 
 if (PYQUBO_BUILD_SHARED_LIBS)
   pybind11_add_module(cpp_pyqubo SHARED
@@ -82,7 +84,4 @@ else()
     ${PROJECT_SOURCE_DIR}/poly.cpp
   )
 endif()
-# VERSION_INFO is defined by setup.py and passed into the C++ code as a define (VERSION_INFO) here.
-target_compile_definitions(cpp_pyqubo PRIVATE VERSION_INFO=${PYQUBO_VERSION_INFO})
 
-add_subdirectory(src)
