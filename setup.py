@@ -13,8 +13,6 @@ from setuptools.command.build_ext import build_ext
 
 if platform.system() == "Windows":
     from setuptools import setup
-elif platform.system() == "Darwin":
-    from setuptools import setup
 elif find_spec('skbuild'):
     from skbuild import setup
 elif os.getenv('NOT_USE_SKBUILD'):
@@ -78,10 +76,11 @@ class CMakeBuild(build_ext):
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', str(CPU_COUNT)]
-
+        # disable macos openmp since addtional dependency is needed.
+        if platform.system() == 'Darwin' and (not {'True': True, 'False': False}[os.getenv('USE_OMP', 'False')]):
+            cmake_kwargs += ['-DUSE_OMP=No']
         env = os.environ.copy()
-        env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
-                                                              self.distribution.get_version())
+        env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''), self.distribution.get_version())
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
 
