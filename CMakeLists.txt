@@ -38,8 +38,18 @@ endif()
 if (APPLE)
     find_package(BLAS)
 endif()
+
+
 list(APPEND CMAKE_MODULE_PATH external)
-include(${CMAKE_SOURCE_DIR}/external/pybind11.cmake)
+
+if(USE_TEST)
+       include(${PROJECT_SOURCE_DIR}/external/googletest.cmake)     
+       add_subdirectory(tests)
+else()
+	message(STATUS "Skip downloding googletest")
+endif()
+
+include(${PROJECT_SOURCE_DIR}/external/pybind11.cmake)
 #include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
 include_directories(cpp_dimod)
 
@@ -61,7 +71,3 @@ pybind11_add_module(cpp_pyqubo MODULE
 target_compile_definitions(cpp_pyqubo PRIVATE VERSION_INFO=${PYQUBO_VERSION_INFO})
 
 add_subdirectory(src)
-
-
-include(${CMAKE_SOURCE_DIR}/external/googletest.cmake)
-add_subdirectory(tests)
