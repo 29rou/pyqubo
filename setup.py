@@ -152,35 +152,6 @@ class PyTestCommand(TestCommand):
 
 package_info = PackageInfo(os.path.join('pyqubo', 'package_info.py'))       
         
-packages = ['pyqubo', 'pyqubo.integer', 'pyqubo.utils']
-
-install_requires = [
-        'numpy>=1.17.3',
-        'dimod>=0.9.14',
-        'dwave-neal>=0.5.7',
-        'Deprecated>=1.2.12',
-        'six>=1.15.0'
-        ]
-
-setup_requires = [
-        'numpy>=1.17.3, <=1.20.0',
-        'wheel>=0.36.2',
-        'Cython>=0.29.21'
-        "cmake>=3.20.5",
-        'setuptools',
-        ]
-
-
-tests_require = [
-        'pytest',
-        'pytest-mock',
-        'pytest-cov', 
-        'pytest-html',
-        'coverage>=4.5.1',
-        'codecov>=2.1.9'
-        ]
-
-python_requires = '>=3.7, <=3.10'
 
 setup(
         name=package_info.__package_name__,
@@ -196,23 +167,5 @@ setup(
         license=package_info.__license__,
         ext_modules=[CMakeExtension('pyqubo')],
         cmdclass=dict(build_ext=CMakeBuild, test=GoogleTestCommand, pytest=PyTestCommand),
-        test_suite="tests",
-        zip_safe=False,
-        packages=packages,
         keywords=package_info.__keywords__,
-        install_requires=install_requires,
-        setup_requires=setup_requires,
-        python_requires=python_requires,
-        tests_require=tests_require,
-        include_package_data=True,
-        classifiers=[
-                'Programming Language :: Python :: 3.7',
-                'Programming Language :: Python :: 3.8',
-                'Programming Language :: Python :: 3.9',
-                'Programming Language :: Python :: 3.10',
-                'License :: OSI Approved :: Apache Software License',
-                'Operating System :: MacOS :: MacOS X',
-                'Operating System :: Microsoft :: Windows :: Windows 10', 
-                'Operating System :: POSIX :: Linux',
-                ]
         )
