@@ -127,6 +127,7 @@ setup_requires = [
         'wheel>=0.36.2',
         'Cython>=0.29.21'
         "cmake>=3.18.4",
+        "pybind11>=2.6.1",
         'setuptools',
         'nbsphinx'
         ]
