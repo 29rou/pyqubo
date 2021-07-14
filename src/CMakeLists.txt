@@ -1,14 +1,6 @@
-include_directories(../include)
-
-pybind11_add_module(cpp_pyqubo MODULE
-pybind_mapping.cpp
-express.cpp
-coeff.cpp
-encoder.cpp
-placeholderpoly.cpp
-expanded.cpp
-poly.cpp
-)
+target_include_directories(cpp_pyqubo
+  PUBLIC ${PROJECT_SOURCE_DIR}/include
+  )
 
 set_target_properties(cpp_pyqubo PROPERTIES
     CXX_VISIBILITY_PRESET "hidden"
