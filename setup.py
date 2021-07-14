@@ -120,17 +120,16 @@ class GoogleTestCommand(TestCommand):
     """
     A custom test runner to execute both Python unittest tests and C++ Google Tests.
     """
-   user_options = []
-   def initialize_options(self):
-    self.cpplibdir = self.distutils_dir_name()
+    def initialize_options(self):
+        self.cpplibdir = self.distutils_dir_name()
 
-   def distutils_dir_name(self):
+    def distutils_dir_name(self):
         """Returns the name of a distutils build directory"""
         f = "temp.{platform}-{version[0]}.{version[1]}"
         return f.format(platform=sysconfig.get_platform(),
                         version=sys.version_info)
 
-   def run(self):
+    def run(self):
         # Run Python tests
         super(GoogleTestCommand, self).run()
         print("\nPython tests complete, now running C++ tests...\n")
