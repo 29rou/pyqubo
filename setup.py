@@ -123,9 +123,6 @@ class GoogleTestCommand(TestCommand):
    def initialize_options(self):
         self.cpplibdir = self.distutils_dir_name()
 
-   def finalize_options(self):
-        pass
-
    user_options = []
 
    def distutils_dir_name(self):
@@ -134,7 +131,7 @@ class GoogleTestCommand(TestCommand):
         return f.format(platform=sysconfig.get_platform(),
                         version=sys.version_info)
 
-    def run(self):
+   def run(self):
         # Run Python tests
         super(GoogleTestCommand, self).run()
         print("\nPython tests complete, now running C++ tests...\n")
