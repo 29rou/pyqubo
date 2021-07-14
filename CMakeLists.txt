@@ -31,9 +31,6 @@ endif()
 
 message(STATUS "USE_OMP = ${USE_OMP}")
 
-include(external/pybind11.cmake)
-include_directories(cpp_dimod)
-add_subdirectory(src)
 
 if(USE_OMP)
     find_package(OpenMP REQUIRED)
@@ -49,6 +46,14 @@ endif()
 if (APPLE)
     find_package(BLAS)
 endif()
+list(APPEND CMAKE_MODULE_PATH external)
+include(${CMAKE_SOURCE_DIR}/external/pybind11.cmake)
+include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
+include_directories(cpp_dimod)
 
-include(external/googletest.cmake)
+add_subdirectory(src)
+add_subdirectory(pyqubo)
+
+
+include(${CMAKE_SOURCE_DIR}/external/googletest.cmake)
 add_subdirectory(tests)
