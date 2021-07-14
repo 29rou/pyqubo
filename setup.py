@@ -11,6 +11,8 @@ from multiprocessing import cpu_count
 from setuptools import setup, Extension, Command
 from setuptools.command.build_ext import build_ext
 
+from package_info import PackageInfo
+
 CPU_COUNT = "-j" + str(cpu_count() + 1)
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
@@ -20,18 +22,6 @@ PLAT_TO_CMAKE = {
     "win-arm32": "ARM",
     "win-arm64": "ARM64",
 }
-
-class PackageInfo(object):
-    def __init__(self, info_file):
-        with open(info_file) as f:
-            exec(f.read(), self.__dict__)
-        self.__dict__.pop('__builtins__', None)
-
-    def __getattribute__(self, name):
-        return super(PackageInfo, self).__getattribute__(name)
-
-
-package_info = PackageInfo(os.path.join('pyqubo', 'package_info.py'))
 
 # A CMakeExtension needs a sourcedir instead of a file list.
 # The name must be the _single_ output extension from the CMake build.
@@ -109,6 +99,8 @@ class CppTest(Command):
                         cwd=os.path.join('build', self.cpplibdir), shell=True)
 
 
+package_info = PackageInfo(os.path.join('pyqubo', 'package_info.py'))       
+        
 packages = ['pyqubo', 'pyqubo.integer', 'pyqubo.utils']
 
 install_requires = [
