@@ -9,7 +9,10 @@ FetchContent_Declare(
 
 FetchContent_GetProperties(googletest)
 if(NOT googletest_POPULATED)
-    message(STATUS "Fetch googletest for C++ testing")
-    FetchContent_Populate(googletest)
-    add_subdirectory(${googletest_SOURCE_DIR} ${googletest_SOURCE_DIR}/googlemock)
+  message(STATUS "Fetch googletest for C++ testing")
+  FetchContent_Populate(googletest)
+  add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+  add_subdirectory(${googletest_SOURCE_DIR} ${googletest_SOURCE_DIR}/googlemock)
 endif()
+
+FetchContent_MakeAvailable(googletest)
