@@ -8,22 +8,18 @@ from distutils.version import LooseVersion
 from importlib.util import find_spec
 from multiprocessing import cpu_count
 
-from setuptools import Command, Extension
+from setuptools import setup, Extension, Command
 from setuptools.command.build_ext import build_ext
-
-if platform.system() == "Windows":
-    from setuptools import setup
-elif find_spec('skbuild'):
-    from skbuild import setup
-elif os.getenv('NOT_USE_SKBUILD'):
-    from setuptools import setup
-elif os.getenv('READTHEDOCS'):
-    from skbuild import setup
-else:
-    from setuptools import setup
 
 CPU_COUNT = "-j" + str(cpu_count() + 1)
 
+# Convert distutils Windows platform specifiers to CMake -A arguments
+PLAT_TO_CMAKE = {
+    "win32": "Win32",
+    "win-amd64": "x64",
+    "win-arm32": "ARM",
+    "win-arm64": "ARM64",
+}
 
 class PackageInfo(object):
     def __init__(self, info_file):
@@ -37,9 +33,11 @@ class PackageInfo(object):
 
 package_info = PackageInfo(os.path.join('pyqubo', 'package_info.py'))
 
-
+# A CMakeExtension needs a sourcedir instead of a file list.
+# The name must be the _single_ output extension from the CMake build.
+# If you need multiple extensions, see scikit-build.
 class CMakeExtension(Extension):
-    def __init__(self, name, sourcedir=''):
+    def __init__(self, name, sourcedir=""):
         Extension.__init__(self, name, sources=[])
         self.sourcedir = os.path.abspath(sourcedir)
 
