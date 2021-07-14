@@ -46,7 +46,7 @@ if (APPLE)
 endif()
 list(APPEND CMAKE_MODULE_PATH external)
 include(${CMAKE_SOURCE_DIR}/external/pybind11.cmake)
-include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
+#include(${CMAKE_SOURCE_DIR}/external/cimod.cmake)
 include_directories(cpp_dimod)
 
 add_subdirectory(src)
