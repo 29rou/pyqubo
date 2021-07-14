@@ -84,4 +84,3 @@ else()
     ${PROJECT_SOURCE_DIR}/poly.cpp
   )
 endif()
-
