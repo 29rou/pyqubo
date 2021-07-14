@@ -11,23 +11,6 @@ env:
   Python_Version: 3.9
 
 jobs:
-  build_sdist:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        name: Install Python
-        with:
-          python-version: ${{env.Python_Version}}
-      - name: Build sdist
-        run: |
-          pip install -r requirements.txt
-          python setup.py sdist
-      - uses: actions/upload-artifact@v2
-        with:
-          name: WHEEL
-          path: dist/*.tar.gz
-          retention-days: 30
           
   build_wheels:
     name: Build wheels ${{ matrix.CIBW_BUILD }} 
@@ -36,10 +19,6 @@ jobs:
       fail-fast: false 
       matrix:       
         include:  
-         - CIBW_BUILD: cp39-macosx_x86_64
-           os: macos-latest
-           arch: x86_64
-           CIBW_PLATFORM: macos 
    
          - CIBW_BUILD: cp39-macosx_arm64
            os: macos-latest
@@ -105,16 +84,4 @@ jobs:
           path: ./wheelhouse/*.whl
           retention-days: 30
           
-  upload_pypi:
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'release'
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: WHEEL
-          path: dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: ${{ secrets.PYPI_USERNAME }}
-          password: ${{ secrets.PYPI_PASSWORD }}
+  
