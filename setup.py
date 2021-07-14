@@ -48,7 +48,7 @@ class CMakeBuild(build_ext):
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
-            "-DPYQUBO_VERSION_INFO={}".format(self.distribution.get_version()),
+            "-DPYQUBO_BUILD_SHARED_LIBS=OFF",
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
         ]
         build_args = []
