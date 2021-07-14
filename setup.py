@@ -13,6 +13,8 @@ from setuptools.command.build_ext import build_ext
 
 if platform.system() == "Windows":
     from setuptools import setup
+elif platform.system() == "Darwin":
+    from setuptools import setup
 elif find_spec('skbuild'):
     from skbuild import setup
 elif os.getenv('NOT_USE_SKBUILD'):
@@ -82,9 +84,10 @@ class CMakeBuild(build_ext):
                                                               self.distribution.get_version())
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-        subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
-        subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 
+        subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
+        subprocess.check_call(
+            ['cmake', '--build', '.', '--target', 'python'] + build_args, cwd=self.build_temp)
 
 class CppTest(Command):
 
