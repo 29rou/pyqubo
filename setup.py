@@ -119,7 +119,7 @@ install_default_requires = [
     ]
 
 install_dimod_requires = [
-    "dimod>=0.10.0, <0.11; extra != 'dimod-old-version'",
+    'dimod>=0.10.0, <0.11; extra != "dimod-old-version"',
     ]
 
 install_old_dimod_requires = [
