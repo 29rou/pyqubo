@@ -88,7 +88,7 @@ jobs:
         with:
           platforms: all
       - name: Build wheels on ${{ matrix.CIBW_PLATFORM }} ${{matrix.arch}}
-        uses: pypa/cibuildwheel@v2.1.2
+        uses: pypa/cibuildwheel@2.6.0
       - uses: actions/upload-artifact@v2
         with:
           name: artifact
