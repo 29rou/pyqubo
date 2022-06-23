@@ -159,7 +159,7 @@ packages = ['pyqubo', 'pyqubo.integer', 'pyqubo.utils']
 install_requires = [ 
         "typing-extensions; python_version < '3.8'",
         'numpy>=1.17.3',
-        "dimod>=0.10.0, <0.11",
+        "dimod>=0.10.0, <0.12",
         'dwave-neal>=0.5.7',
         'Deprecated>=1.2.12',
         'six>=1.15.0'
