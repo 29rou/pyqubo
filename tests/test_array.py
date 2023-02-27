@@ -55,12 +55,12 @@ class TestArray(unittest.TestCase):
         array3 = Array([[Binary('x0'), Binary('x1')], [Binary('x2'), Binary('x4')]])
         self.assertTrue(array1 == array2)
         self.assertTrue(array1 != array3)
-        self.assertTrue(not array1 == Binary('x2'))
+        self.assertTrue(array1 != Binary('x2'))
     
     def test_array_iter(self):
         array = Array.create('x', shape=(2, 2), vartype='BINARY')
         self.assertTrue(len(array) == 2)
-        self.assertTrue([e for e in array] == [array[0], array[1]])
+        self.assertTrue(list(array) == [array[0], array[1]])
     
     def test_array_from_numpy(self):
         array = Array(np.array([[1, 2], [3, 4]]))
@@ -86,7 +86,7 @@ class TestArray(unittest.TestCase):
         self.assertTrue(1 + array1 == expected2)
         self.assertTrue(array1 + np.ones((2, 2)) == expected2)
 
-        self.assertRaises(TypeError, lambda: array1 + "str")
+        self.assertRaises(TypeError, lambda: f"{array1}str")
         array3 = Array.create('z', (2, 3), 'BINARY')
         self.assertRaises(ValueError, lambda: array1 + array3)
 

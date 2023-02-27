@@ -56,8 +56,7 @@ class OrderEncInteger(IntegerWithPenalty):
         assert upper > lower, "upper value should be larger than lower value"
         assert isinstance(lower, int)
         assert isinstance(upper, int)
-        assert isinstance(strength, int) or isinstance(strength, float) or\
-            isinstance(strength, Placeholder)
+        assert isinstance(strength, (int, float, Placeholder))
 
         self._num_variables = (upper - lower)
         self.array = Array.create(label, shape=self._num_variables, vartype='BINARY')
@@ -66,7 +65,7 @@ class OrderEncInteger(IntegerWithPenalty):
         for i in range(self._num_variables - 1):
             a = self.array[i]
             b = self.array[i + 1]
-            const_label = label + "_order_" + str(i)
+            const_label = f"{label}_order_{str(i)}"
             self.constraint += Constraint(b-a*b, const_label, condition=lambda x: x==0)
 
         express = SubH(lower + sum(self.array), label=label)
@@ -113,8 +112,8 @@ class OrderEncInteger(IntegerWithPenalty):
         """
         assert isinstance(k, int), "k should be integer"
         lower, upper = self.value_range
-        assert k > lower, "This value is always equal to or more than {}".format(k)
-        assert k <= upper, "This value is never more than {}".format(k)
+        assert k > lower, f"This value is always equal to or more than {k}"
+        assert k <= upper, f"This value is never more than {k}"
         return self.array[k-lower]
 
     def less_than(self, k):
@@ -151,6 +150,6 @@ class OrderEncInteger(IntegerWithPenalty):
         """
         assert isinstance(k, int), "k should be integer"
         lower, upper = self.value_range
-        assert k >= lower, "This value is always more than {}".format(k)
-        assert k < upper, "This value is always more than {}".format(k)
+        assert k >= lower, f"This value is always more than {k}"
+        assert k < upper, f"This value is always more than {k}"
         return 1-self.array[k-lower-1]

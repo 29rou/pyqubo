@@ -55,12 +55,15 @@ class OneHotEncInteger(IntegerWithPenalty):
         assert upper > lower, "upper value should be larger than lower value"
         assert isinstance(lower, int)
         assert isinstance(upper, int)
-        assert isinstance(strength, int) or isinstance(strength, float) or\
-            isinstance(strength, Placeholder)
+        assert isinstance(strength, (int, float, Placeholder))
 
         self._num_variables = (upper - lower + 1)
         self.array = Array.create(label, shape=self._num_variables, vartype='BINARY')
-        self.constraint = Constraint((sum(self.array)-1)**2, label=label+"_const", condition=lambda x: x==0)
+        self.constraint = Constraint(
+            (sum(self.array) - 1) ** 2,
+            label=f"{label}_const",
+            condition=lambda x: x == 0,
+        )
 
         express = SubH(lower + sum(i*x for i, x in enumerate(self.array)), label=label)
         penalty = self.constraint * strength
@@ -85,6 +88,6 @@ class OneHotEncInteger(IntegerWithPenalty):
         """
         lower, upper = self.value_range
         assert isinstance(k, int), "k should be integer"
-        assert lower <= k <= upper, "This value never takes {}".format(k)
+        assert lower <= k <= upper, f"This value never takes {k}"
         return self.array[k-lower]
 
