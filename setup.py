@@ -46,7 +46,7 @@ class CMakeBuild(build_ext):
                                ", ".join(e.name for e in self.extensions))
 
         if platform.system() == "Windows":
-            cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.decode()).group(1))
+            cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.decode())[1])
             if cmake_version < '3.16':
                 raise RuntimeError("CMake >= 3.16 is required on Windows")
 

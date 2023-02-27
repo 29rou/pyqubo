@@ -138,8 +138,8 @@ class XorConst(SubH):
     """
 
     def __init__(self, a, b, c, label):
-        aux = Binary("aux_" + label)
+        aux = Binary(f"aux_{label}")
         express = 2 * a * b - 2 * (a + b) * c - 4 * (a + b) * aux +\
-                                4 * aux * c + a + b + c + 4 * aux
+                                    4 * aux * c + a + b + c + 4 * aux
 
         super().__init__(express, label)

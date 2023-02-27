@@ -96,7 +96,7 @@ class Array:
 
         elif isinstance(bit_list, list):
             def get_shape(l):
-                if isinstance(l, list) or isinstance(l, Array) or isinstance(l, np.ndarray):
+                if isinstance(l, (list, Array, np.ndarray)):
                     length = len(l)
                     shape_set = {get_shape(e) for e in l}
                     if len(shape_set) == 1:
@@ -160,7 +160,7 @@ class Array:
                 current_index = index[0]
                 if isinstance(current_index, int):
                     return get_item(l[current_index], index[1:])
-                elif isinstance(current_index, list) or isinstance(current_index, tuple):
+                elif isinstance(current_index, (list, tuple)):
                     return [get_item(l[i], index[1:]) for i in current_index]
                 else:
                     return [get_item(e, index[1:]) for e in l[current_index]]
@@ -169,10 +169,7 @@ class Array:
 
         item = get_item(self.bit_list, key)
 
-        if isinstance(item, list):
-            return Array(item)
-        else:
-            return item
+        return Array(item) if isinstance(item, list) else item
 
     def __repr__(self):
         nest_depth = len(self.shape)
@@ -188,15 +185,12 @@ class Array:
                     ).join([format_nested_list(sub_list, nest_count+1) for sub_list in nested_list])
                 )
             else:
-                return '[%s]' % ', '.join(map(str, nested_list))
+                return f"[{', '.join(map(str, nested_list))}]"
 
         return 'Array({body})'.format(body=format_nested_list(self.bit_list, 1))
 
     def __eq__(self, other):
-        if not isinstance(other, Array):
-            return False
-        else:
-            return self.bit_list == other.bit_list
+        return self.bit_list == other.bit_list if isinstance(other, Array) else False
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -411,11 +405,7 @@ class Array:
         if isinstance(shape, int):
             shape = shape,
 
-        if vartype == dimod.Vartype.BINARY:
-            var_class = Binary
-        else:
-            var_class = Spin
-
+        var_class = Binary if vartype == dimod.Vartype.BINARY else Spin
         def var_name(_name, index):
             return "{name}{index_repr}".format(
                 name=_name, index_repr=''.join(['[%d]' % i for i in index]))
@@ -486,7 +476,7 @@ class Array:
         """
         if isinstance(other, np.ndarray):
             other = Array(other)
-        elif isinstance(other, int) or isinstance(other, float) or isinstance(other, Base):
+        elif isinstance(other, (int, float, Base)):
             other = Array.fill(other, self.shape)
         elif not isinstance(other, Array):
             raise TypeError('Operation of Array cannot be done with type:{type}'
@@ -505,7 +495,7 @@ class Array:
         """
         if not isinstance(other, Array):  # pragma: no cover
             raise TypeError('Type of `other` is not a `Array` instance.')
-        elif not self.shape == other.shape:
+        elif self.shape != other.shape:
             raise ValueError('Shape of other is not same as that of self.')
         else:
             def operate(l1, l2):
@@ -602,7 +592,7 @@ class Array:
             >>> array_a.dot(array_b) # doctest: +SKIP
             ((Binary(a)*Num(3))+(Binary(b)*Num(4)))
         """
-        if isinstance(other, np.ndarray) or isinstance(other, list):
+        if isinstance(other, (np.ndarray, list)):
             other = Array(other)
 
         if not isinstance(other, Array):
@@ -694,7 +684,7 @@ class Array:
             True
         """
 
-        if isinstance(other, np.ndarray) or isinstance(other, list):
+        if isinstance(other, (np.ndarray, list)):
             other = Array(other)
         assert isinstance(other, Array), "Type should be Array, not {type}".format(type=type(other))
 
@@ -750,8 +740,7 @@ class Array:
         for d in shape[::-1]:
             steps.append(tmp_d)
             tmp_d *= d
-        steps = steps[::-1]
-        return steps
+        return steps[::-1]
 
     def reshape(self, new_shape):
         """Returns a reshaped array.

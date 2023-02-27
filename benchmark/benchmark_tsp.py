@@ -57,12 +57,15 @@ def measure(step, init_size, max_size, timeout):
     for n_city in range(init_size, max_size+step, step):
         try:
             max_memory, (express_time, compile_time) = memory_usage((tsp_with_timeout, (n_city, timeout)), max_usage=True, retval=True)
-            logger.info("Memory usage is {} MB for n_city={}".format(max_memory, n_city))
-            logger.info("Elapsed time is {} sec (expression: {} sec, compile: {} sec), for n_city={}".format(
-                express_time+compile_time, express_time, compile_time, n_city))
+            logger.info(f"Memory usage is {max_memory} MB for n_city={n_city}")
+            logger.info(
+                f"Elapsed time is {express_time + compile_time} sec (expression: {express_time} sec, compile: {compile_time} sec), for n_city={n_city}"
+            )
 
         except TimeoutError as e:
-            logger.error("TimeoutError: Elapsed time exceeded {} sec for n_city={}".format(timeout, n_city))
+            logger.error(
+                f"TimeoutError: Elapsed time exceeded {timeout} sec for n_city={n_city}"
+            )
             break
 
 

@@ -75,7 +75,13 @@ class TestModel(unittest.TestCase):
         sample = {'x[0][1]': 1, 'x[1][1]': 0, 'x[0][0]': 0}
         decoded_sample = model.decode_sample(sample, vartype="BINARY")
         self.assertTrue(decoded_sample.sample == sample)
-        self.assertTrue(len([label for label, energy in decoded_sample.subh.items() if energy > 0]) == 0)
+        self.assertTrue(
+            not [
+                label
+                for label, energy in decoded_sample.subh.items()
+                if energy > 0
+            ]
+        )
         self.assertTrue(decoded_sample.energy == 0)
         self.assertTrue(decoded_sample.array("x", (0, 0)) == 0)
         self.assertTrue(decoded_sample.array("x", (0, 1)) == 1)
@@ -94,7 +100,13 @@ class TestModel(unittest.TestCase):
         sample = {'x[0][1]': 1, 'x[1][1]': -1, 'x[0][0]': -1}
         decoded_sample = model.decode_sample(sample, vartype="SPIN")
         self.assertTrue(decoded_sample.sample == sample)
-        self.assertTrue(len([label for label, energy in decoded_sample.subh.items() if energy > 0]) == 0)
+        self.assertTrue(
+            not [
+                label
+                for label, energy in decoded_sample.subh.items()
+                if energy > 0
+            ]
+        )
         self.assertTrue(decoded_sample.energy == 0)
         self.assertTrue(decoded_sample.array("x", (0, 0)) == -1)
         self.assertTrue(decoded_sample.array("x", (0, 1)) == 1)
@@ -117,7 +129,13 @@ class TestModel(unittest.TestCase):
         list_sample = [sample[v] for v in model.variables]
         decoded_sample = model.decode_sample(list_sample, vartype="BINARY")
         self.assertTrue(decoded_sample.sample == sample)
-        self.assertTrue(len([label for label, energy in decoded_sample.subh.items() if energy > 0]) == 0)
+        self.assertTrue(
+            not [
+                label
+                for label, energy in decoded_sample.subh.items()
+                if energy > 0
+            ]
+        )
         self.assertTrue(decoded_sample.energy == 0)
         self.assertTrue(decoded_sample.array("x", (0, 0)) == 0)
         self.assertTrue(decoded_sample.array("x", (0, 1)) == 1)
@@ -138,7 +156,13 @@ class TestModel(unittest.TestCase):
         list_sample = [sample[v] for v in model.variables]
         decoded_sample = model.decode_sample(list_sample, vartype="SPIN")
         self.assertTrue(decoded_sample.sample == sample)
-        self.assertTrue(len([label for label, energy in decoded_sample.subh.items() if energy > 0]) == 0)
+        self.assertTrue(
+            not [
+                label
+                for label, energy in decoded_sample.subh.items()
+                if energy > 0
+            ]
+        )
         self.assertTrue(decoded_sample.energy == 0)
         self.assertTrue(decoded_sample.array("x", (0, 0)) == -1)
         self.assertTrue(decoded_sample.array("x", (0, 1)) == 1)
@@ -160,7 +184,13 @@ class TestModel(unittest.TestCase):
         sample_index = {v: sample[v] for v in model.variables}
         decoded_sample = model.decode_sample(sample_index, vartype="BINARY")
         self.assertTrue(decoded_sample.sample == sample)
-        self.assertTrue(len([label for label, energy in decoded_sample.subh.items() if energy > 0]) == 0)
+        self.assertTrue(
+            not [
+                label
+                for label, energy in decoded_sample.subh.items()
+                if energy > 0
+            ]
+        )
         self.assertTrue(decoded_sample.energy == 0)
         self.assertTrue(decoded_sample.array("x", (0, 0)) == 0)
         self.assertTrue(decoded_sample.array("x", (0, 1)) == 1)
@@ -181,7 +211,13 @@ class TestModel(unittest.TestCase):
         sample_index = {v: sample[v] for v in model.variables}
         decoded_sample = model.decode_sample(sample_index, vartype="SPIN")
         self.assertTrue(decoded_sample.sample == sample)
-        self.assertTrue(len([label for label, energy in decoded_sample.subh.items() if energy > 0]) == 0)
+        self.assertTrue(
+            not [
+                label
+                for label, energy in decoded_sample.subh.items()
+                if energy > 0
+            ]
+        )
         self.assertTrue(decoded_sample.energy == 0)
         self.assertTrue(decoded_sample.array("x", (0, 0)) == -1)
         self.assertTrue(decoded_sample.array("x", (0, 1)) == 1)
